@@ -1,0 +1,53 @@
+Lab 3B | 2014 Mar 16
+========================================================
+
+Start-Up
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/ames.RData"))
+```
+
+Lab Work
+--------------------------------------------------------
+
+```{r}
+# draw a random sample of size 60 from the living area variable
+population = ames$Gr.Liv.Area
+samp = sample(population,60)
+# calculate the sample mean
+sample_mean = mean(samp)
+# draw a histogram of the sample data
+hist(samp)
+# build the 95% confidence interval
+se = sd(samp)/sqrt(60)
+lower = sample_mean - (1.96*se)
+upper = sample_mean + (1.96*se)
+# print the bounds
+c(lower,upper)
+# run 50 iterations of a sample of size 60
+# initialize the variables
+samp_mean = rep(NA, 50)
+samp_sd = rep(NA, 50)
+n = 60
+# create a for loop for the sampling plan
+for (i in 1:50) {
+samp = sample(population,n)
+samp_mean[i] = mean(samp)
+samp_sd[i] = sd(samp)
+}
+# calculate the interval bounds for each entry in the vectors at the 95% confidence level
+lower = samp_mean - (1.96*(samp_sd/sqrt(n)))
+upper = samp_mean + (1.96*(samp_sd/sqrt(n)))
+# Plotting the confidence intervals:
+pop_mean = mean(population)
+plot_ci(lower, upper, pop_mean)
+# repeat for the 99% confidence interval
+lower = samp_mean - (2.58*(samp_sd/sqrt(n)))
+upper = samp_mean + (2.58*(samp_sd/sqrt(n)))
+pop_mean = mean(population)
+plot_ci(lower, upper, pop_mean)
+```

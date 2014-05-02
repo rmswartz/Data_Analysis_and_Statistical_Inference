@@ -1,0 +1,75 @@
+Lab 02 | 2014 Mar 09
+========================================================
+
+Set-Up
+
+```{r}
+# clear console
+cat("\014")
+# set working directory
+setwd("C://Users//Dominique//Desktop//Data_Analysis_and_Statistical_Inference")
+library("knitr")
+```
+
+Lab Work
+
+```{r}
+# load the Kobe data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/kobe.RData"))
+# inspect data with head function
+head(kobe)
+# print the names of the variables
+names(kobe)
+# print the first 9 shot attempt outcomes
+kobe[1:9,6]
+# calculate the length of each streak in the data
+kobe_streak = calc_streak(kobe$basket)
+# graph a bar plot of the streak length
+```
+
+```{r fig.width=7, fig.height=6}
+barplot(table(kobe_streak))
+```
+
+```{r}
+# simulate flipping a fair coin for practice
+outcomes = c("heads", "tails")
+sample(outcomes, size=1, replace=TRUE)
+sample(outcomes, size=1, replace=TRUE)
+sample(outcomes, size=1, replace=TRUE)
+# simulate flipping a fair coin 100 times
+sim_fair_coin = sample(outcomes, size=100, replace=TRUE)
+# print the object
+sim_fair_coin
+# tablulate the number of heads and tails using the table function
+table(sim_fair_coin)
+# simulate 100 flips of an unfair coin of P(heads) = 0.2
+outcomes = c("heads", "tails")
+sim_unfair_coin = sample(outcomes, size=100, replace=TRUE, prob=c(0.2,0.8))
+# print the object
+sim_unfair_coin
+# tabulate the number of heads and tails using the table function
+table(sim_unfair_coin)
+# simulate a basketball player with 45% shooting average (same as Kobe) for 133 shots
+outcomes = c("H", "M")
+sim_basket = sample(outcomes,size=133,replace=TRUE,prob=c(0.45,0.55))
+# inspect the summary of results
+table(sim_basket)
+# calculate the streak lengths for Kobe and the independent shooter simulation
+kobe_streak = calc_streak(kobe$basket)
+sim_streak = calc_streak(sim_basket)
+# calculate summary statistics for each streak
+summary(kobe_streak)
+summary(sim_streak)
+# create a bar plot for each streak
+kobe_table = table(kobe_streak)
+sim_table = table(sim_streak)
+```
+
+```{r fig.width=7, fig.height=6}
+barplot(kobe_table)
+```
+
+```{r fig.width=7, fig.height=6}
+barplot(sim_table)
+```

@@ -1,0 +1,106 @@
+Lab 3A | 2014 Mar 16
+========================================================
+
+Start-Up
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/ames.RData"))
+# inspect data
+names(ames)
+head(ames)
+```
+
+Lab Work
+--------------------------------------------------------
+
+```{r}
+# create two objects of a portion of the Ames data
+area = ames$Gr.Liv.Area
+price = ames$SalePrice
+# summarize and create a histogram of the 'area' object
+summary(area)
+hist(area)
+# collect two 50-unit samples from area
+samp0 = sample(area,50)
+samp1 = sample(area,50)
+# draw histograms of these samples
+hist(samp0)
+hist(samp1)
+# Set up an empty vector or 5000 NAs to store sample means:
+sample_means50 = rep(NA, 5000)
+# Take 5000 samples of size 50 of 'area' and store all of them in
+# 'sample_means50'.
+for (i in 1:5000) {
+    samp = sample(area, 50)
+    sample_means50[i] = mean(samp)
+}
+# View the result. If you want, you can increase the bin width to show more
+# detail by changing the 'breaks' argument.
+hist(sample_means50, breaks = 13)
+# view the first few sample means
+head(sample_means50)
+# repeat the process for a smaller number of iterations
+# 1) create an empty vector of the same size as the intended number of iterations (100)
+sample_means_small = rep(NA,100)
+# 2) set-up and run the 'for' loop to sample and calculate the means
+for (i in 1:100) {
+  small_samp = sample(area,50)
+  small_sample_means[i] = mean(small_samp)
+}
+# print the result
+small_sample_means
+# create two more sampling distributions of different sample sizes to see the effect
+# Initialize the sample distributions:
+sample_means10 = rep(NA, 5000)
+sample_means100 = rep(NA, 5000)
+
+# Run the for loop:
+for (i in 1:5000) {
+    samp = sample(area, 10)
+    sample_means10[i] = mean(samp)
+    samp = sample(area, 100)
+    sample_means100[i] = mean(samp)
+}
+
+# Take a look at the results:
+head(sample_means10)
+head(sample_means50)  # was already loaded
+head(sample_means100)
+# plot all three in a comparable format (i.e., all histograms on the same scale)
+# divide the plot in 3 rows:
+par(mfrow = c(3, 1))
+# define the limits for the x-axis to be that of the most spread-out sampling distribution (the 10)
+xlimits = range(sample_means10)
+# draw the 3 histograms, which will be in the same picture
+hist(sample_means10,breaks=20,xlim=xlimits)
+hist(sample_means50,breaks=20,xlim=xlimits)
+hist(sample_means100,breaks=20,xlim=xlimits)
+# PRICE ANALYSIS
+# take a sample of size 50 from 'price'
+sample_50 = sample(price,50)
+# print the mean of this sample
+mean(sample_50)
+# run a 'for' loop to take 5000 iterations of 50 samples and inspect the result
+sample_means50 = rep(NA,5000)
+for (i in 1:5000) {
+  samp = sample(price,50)
+  sample_means50[i] = mean(samp)
+}
+head(sample_means50)
+# repeat the process for a sample size of 1500
+sample_means150 = rep(NA,5000)
+for (i in 1:5000) {
+  samp = sample(price,150)
+  sample_means150[i] = mean(samp)
+}
+head(sample_means150)
+# draw histograms of the two price sampling distributions (for sample sizes of 50 and 150)
+par(mfrow = c(2, 1))
+xlimits = range(sample_means50)
+hist(sample_means50,breaks=20,xlim=xlimits)
+hist(sample_means150,breaks=20,xlim=xlimits)
+```

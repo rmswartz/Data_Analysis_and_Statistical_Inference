@@ -1,0 +1,99 @@
+Lab 04 | 2014 Mar 30
+========================================================
+
+Start-Up: NC Birth Data
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/nc.Rdata"))
+# list names in dataset
+names(nc)
+```
+
+Lab Work: NC Birth Data
+--------------------------------------------------------
+
+```{r}
+# compute summaries of the dataset
+summary(nc)
+# compute summary statistics and visualizations of the 'gained' variable
+summary(nc$gained)
+boxplot(nc$gained)
+hist(nc$gained)
+# create a clean version of the 'gained' data, dropping NAs
+gained_clean = na.omit(nc$gained)
+# set the variable, n, to the length of the clean gained vector
+n = length(gained_clean)
+# bootstrap the clean sample
+# 1) initialize boot_means object with 100 NAs
+boot_means = rep(NA,100)
+# 2) create loop for sampling with replacement of size 'n' for 100 iterations
+for (i in 1:100) {
+    samp = sample(gained_clean, n, replace = TRUE)
+    boot_means[i] = mean(samp)
+}
+# create histogram of 'boot_means'
+hist(boot_means)
+# load the 'inference' function created for the course (takes 10K iteration bootstrap)
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/inference.Rdata"))
+# run the inference function
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.9, est = "mean", boot_method = "perc")
+# run the inference function again, this time for the 95% confidence interval
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "mean", boot_method = "perc")
+# run the inference function again, this time changing to the standard error method (boot_method) instead of standard error
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "mean", boot_method = "se")
+# run the inference function again, this time for the median statistic instead of the mean
+inference(nc$gained, type = "ci", method = "simulation", conflevel = 0.95, est = "median", boot_method = "se")
+# run the interval function to create a 95% bootstrap interval for the mean age of fathers
+inference(nc$fage, type = "ci", method = "simulation", conflevel = 0.95, est = "mean", boot_method = "se")
+# examine the relationship of smoking on birthweight
+plot(nc$habit,nc$weight)
+# split the numerical variable by the categorical variable and take the mean of each group using the 'by' function (can also take the arguments median, summary, etc)
+by(nc$weight,nc$habit,mean)
+# check the sample size condition for inference
+by(nc$weight,nc$habit,length)
+# use inference function to determine whether there is a statistical difference in the mean birth weight between the smokers and the non-smokers
+# y is response/variable of interest, x is the categorical/explanatory variable
+# est is the parameter of interest: "mean" in this case (but could also be "median" or "proportion")
+# type is the type of inference: "ht" for hypothesis test or "ci" for confidence interval
+# set the null value; 0 in this case as the H0 is that the populations are equal
+# alternative could be "twosided", "less", "greater"
+# method of inference could be "simulation" or "theoretical"
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical")
+# by default, the order was nonsmoker-smoker; use the order argument to change it to smoker-nonsmoker
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ht", null = 0, alternative = "twosided", method = "theoretical", order = c("smoker","nonsmoker"))
+# construct 95% confidence interval for difference in weights of babies born to non-smokers vs. smokers
+inference(y = nc$weight, x = nc$habit, est = "mean", type = "ci", null = 0, alternative = "twosided", method = "theoretical")
+# determine maximum age of younger mom and minimum age of older mom
+by(nc$mage,nc$mature,summary)
+```
+
+Start-Up: GSS
+--------------------------------------------------------
+
+```{r}
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/gss.Rdata"))
+```
+
+Lab Work: GSS
+--------------------------------------------------------
+```{r}
+# examine the wordsum (vocab test scores) and class (self-reported social class) variables numerically and visually
+summary(gss$wordsum)
+summary(gss$class)
+hist(gss$wordsum)
+plot(gss$class)
+# examine the relationship between wordsum and class numerically and visually
+by(gss$wordsum,gss$class,mean)
+by(gss$wordsum,gss$class,median)
+boxplot(gss$class,gss$wordsum)
+# perform ANOVA test on the relationship between wordsum and class
+# run the inference function with alternative set to "greater" since this is an F test and we only want the upper tail
+inference(y = gss$wordsum, x = gss$class, est = "mean", method = "theoretical", type = "ht", alternative = "greater")
+# aplha* for this is alpha/6 = 0.0083
+# based on this modified significance, the pairings of middle-lower, working-lower, and work-middle demonstrate statistically signifcant differences in mean at the 955 confidence level 
+```

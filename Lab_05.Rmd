@@ -1,0 +1,56 @@
+Lab 05 | 2014 Apr 06
+========================================================
+
+Start-Up: Religious Poll Data
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/atheism.RData"))
+# inspect dataset
+names(atheism)
+head(atheism)
+```
+
+Lab Work: Religion Poll Results
+--------------------------------------------------------
+
+```{r}
+# create subset of data from the U.S. in 2012
+us12 = subset(atheism, atheism$nationality == "United States" & atheism$year == "2012")
+# calculate proportion of US respondents who are atheist
+proportion = sum(us12$response == "atheist")/length(us12$response)
+proportion
+# load inference function
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/inference.Rdata"))
+# run the inference function to estimate the confidence interval for proportion of population who are atheist
+inference(us12$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+# subset the original dataset to just the proportion from India in 2012
+india = subset(atheism, atheism$nationality == "India" & atheism$year == "2012")
+# calculate the confidence interval for proportion of atheists in India
+inference(india$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+# repeat the above China
+china = subset(atheism, atheism$nationality == "China" & atheism$year == "2012")
+inference(china$response, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+# make a plot of the ME as a function of p
+# 1) make a vector p that is a sequence from 0 to 1 with each number separated by 0.01:
+n = 1000
+p = seq(0, 1, 0.01)
+# 2) create a vector of the margin of error (me) associated with each of these values of p using the familiar approximate formula (ME = 2 X SE)
+me = 2 * sqrt(p * (1 - p)/n)
+# 3) plot the two vectors against each other to reveal their relationship
+plot(me ~ p)
+# calculate the CI for change in proportion of atheists in Spain from 2005 to 2012
+# create a subset of only the Spain data
+spain = subset(atheism, atheism$nationality == "Spain")
+# calculate the pooled proportion of atheists from the 'spain' subset
+proportion = sum(spain$response == "atheist")/length(spain$response)
+# use the inference function, with year as the grouping variable
+inference(spain$response, spain$year, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+# do the same for the US
+us = subset(atheism, atheism$nationality == "United States")
+proportion = sum(us$response == "atheist")/length(us$response)
+inference(us$response, us$year, est = "proportion", type = "ci", method = "theoretical", success = "atheist")
+```

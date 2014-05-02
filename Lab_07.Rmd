@@ -1,0 +1,123 @@
+Lab 07 | 2014 Apr 17
+========================================================
+
+Start-Up: Load Data
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# set working directory
+setwd("C:\\Users\\Dominique\\Desktop\\Data_Analysis_and_Statistical_Inference")
+# load the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/evals.RData"))
+```
+
+Work
+--------------------------------------------------------
+
+```{r}
+# assess a few vectors of the score variable
+summary(evals$score)
+hist(evals$score)
+table(evals$score)
+# create a scatterplot for 'age' vs 'bty_avg'
+plot(evals$age, evals$bty_avg)
+# create a boxplot for 'age' and 'gender'
+boxplot(evals$age ~ evals$gender)
+# create a mosaic plot for 'rank' and 'gender'
+mosaicplot(evals$rank ~ evals$gender)
+# create a scatterplot for 'score' and 'bty_avg' (note the overplotting)
+plot(evals$bty_avg, evals$score)
+# apply the 'jitter' function to one of the variables to make the points more
+# visible
+plot(jitter(evals$bty_avg),evals$score)
+# fit a linear model to these data and plot the line on the scatterplot
+m_bty = lm(evals$score ~ evals$bty_avg)
+plot(jitter(evals$bty_avg),evals$score)
+abline(m_bty)
+# determine if m_bty is a practical and statistically significant predictor
+summary(m_bty)
+# slope is statistically significant, but close to 0, so it is not practical
+# R-squared also poor
+# evaluate other conditions
+plot(m_bty$residuals ~ evals$bty_avg)
+hist(m_bty$residuals)
+# plot and assess the correlation between an individual beauty rating and the
+# average
+plot(evals$bty_f1lower, evals$bty_avg)
+cor(evals$bty_f1lower, evals$bty_avg)
+# examine relationship between all beauty variables
+plot(evals[, 13:19])
+# since all of these variables are highly correlated, it makes sense to just
+# use the bty_avg to represent them all
+# create multiple linear regression model between score and avg_bty and gender
+m_bty_gen = lm(evals$score ~ evals$bty_avg + evals$gender)
+# study the outcome; note variable is 'gendermale' meaning males get a value of
+# 1, while females get a value of 0
+summary(m_bty_gen)
+# view the difference in the lines by gender
+multiLines(m_bty_gen)
+# create a MLR model using rank in place of gender and view the summary
+# R breaks the rank level into 2 variables, leaving one as reference (= 0)
+m_bty_rank = lm(evals$score ~ evals$bty_avg + evals$rank)
+summary(m_bty_rank)
+# create the full model and print a summary
+m_full = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m_full)
+# perform step 1 of a backwards elimination using p-value as evaluator
+# drop highest p-value variable (cls_profs) from full model and print summary
+m_new = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + cls_students + cls_level + cls_credits + bty_avg, data = evals)
+summary(m_new)
+# alternatively, peform step 1 of a backward elimination using adjusted R^2
+# full model
+m_full = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m_full)$adj.r.squared
+# remove rank
+m1 = lm(score ~ ethnicity + gender + language + age + cls_perc_eval + cls_students + 
+    cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m1)$adj.r.squared
+# remove ethnicity
+m2 = lm(score ~ rank + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m2)$adj.r.squared
+# remove gender
+m3 = lm(score ~ rank + ethnicity + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m3)$adj.r.squared
+# remove language
+m4 = lm(score ~ rank + ethnicity + gender + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m4)$adj.r.squared
+# remove age
+m5 = lm(score ~ rank + ethnicity + gender + language + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m5)$adj.r.squared
+# remove cls_perc_eval
+m6 = lm(score ~ rank + ethnicity + gender + language + age + 
+    cls_students + cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m6)$adj.r.squared
+# remove cls_students
+m7 = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_level + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m7)$adj.r.squared
+# remove cls_level
+m8 = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_profs + cls_credits + bty_avg, data = evals)
+summary(m8)$adj.r.squared
+# remove cls_profs
+m9 = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_credits + bty_avg, data = evals)
+summary(m9)$adj.r.squared
+# remove cls_credits
+m10 = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + bty_avg, data = evals)
+summary(m10)$adj.r.squared
+# remove bty_avg
+m11 = lm(score ~ rank + ethnicity + gender + language + age + cls_perc_eval + 
+    cls_students + cls_level + cls_profs + cls_credits, data = evals)
+summary(m11)$adj.r.squared
+# removing cls_profs results in the highest R-squared, therefore keep it out
+```

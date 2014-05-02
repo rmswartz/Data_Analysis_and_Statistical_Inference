@@ -1,0 +1,69 @@
+Lab 06 | 2014 Apr 12# clear console
+cat("\014")
+========================================================
+
+Start-Up: 2011 MLB Data
+--------------------------------------------------------
+
+```{r}
+# clear console
+cat("\014")
+# import the data
+load(url("http://s3.amazonaws.com/assets.datacamp.com/course/dasi/mlb11.RData"))
+```
+
+Lab Work: MLB11 Data
+--------------------------------------------------------
+
+```{r}
+# plot runs (y) vs. at bats (x)
+plot(mlb11$at_bats,mlb11$runs)
+# calculate correlation between runs and at bats
+correlation = cor(mlb11$at_bats,mlb11$runs)
+correlation
+# estimate best fit line, where x/y1 and x/y2 are points on the regression line estimated by the user
+x1 = 5400
+y1 = 750
+x2 = 5700
+y2 = 650
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, x1, y1, x2, y2)
+# replot showing the residuals squares
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, x1, y1, x2, y2, showSquares = TRUE)
+# try another set of x/y1 and x/y2 for and plot again
+x1 = 5450
+y1 = 665
+x2 = 5600
+y2 = 755
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, x1, y1, x2, y2, showSquares = TRUE)
+# now, use leastSquares = TRUE to autofit the best line instead of guessing the coordinates
+plot_ss(x = mlb11$at_bats, y = mlb11$runs, showSquares = TRUE, leastSquares = TRUE)
+# make a linear model (y ~ x) between these two variables and print it
+m1 = lm(runs ~ at_bats,data = mlb11)
+m1
+# create a summary of the linear model
+summary(m1)
+# create a linear model for the relationship between runs and homeruns and print the summary
+homeruns = lm(runs ~ homeruns, data = mlb11)
+summary(homeruns)
+# create a scatterplot of the runs and at bats data, the plot the linear model over top
+plot(mlb11$at_bats,mlb11$runs)
+m1 = lm(runs ~ at_bats, data = mlb11)
+abline(m1)
+# create a residuals plot for the m1 model to check against conditions
+plot(m1$residuals ~ mlb11$at_bats)
+abline(h = 0, lty = 3)
+# create a normal probability plot of the residuals
+qqnorm(m1$residuals)
+qqline(m1$residuals)
+# examine a histogram of the residuals
+hist(m1$residuals)
+# create models for other variables and examine which variable is best predictor for runs scored
+m2 = lm(runs ~ hits, data = mlb11); summary(m2)
+m3 = lm(runs ~ wins, data = mlb11); summary(m3)
+m4 = lm(runs ~ bat_avg, data = mlb11); summary(m4) # highest R^2, therefore best predictor
+m5 = lm(runs ~ homeruns, data = mlb11); summary(m5)
+# examine models for the 'new' statistics and their prediction for runs scored
+m6 = lm(runs ~ new_onbase, data = mlb11); summary(m6)
+m7 = lm(runs ~ new_slug, data = mlb11); summary(m7)
+m8 = lm(runs ~ new_obs, data = mlb11); summary(m8) # highest R^2, therefore best predictor
+```
