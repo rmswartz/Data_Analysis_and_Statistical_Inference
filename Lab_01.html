@@ -1,0 +1,394 @@
+<html>
+
+<head>
+<style type="text/css">
+.knitr.inline {
+  background-color: #f7f7f7;
+  border:solid 1px #B0B0B0;
+}
+.error {
+	font-weight: bold;
+	color: #FF0000;
+},
+.warning {
+	font-weight: bold;
+}
+.message {
+	font-style: italic;
+}
+.source, .output, .warning, .error, .message {
+	padding: 0em 1em;
+  border:solid 1px #F7F7F7;
+}
+.source {
+  background-color: #f5f5f5;
+}
+.rimage.left {
+  text-align: left;
+}
+.rimage.right {
+  text-align: right;
+}
+.rimage.center {
+  text-align: center;
+}
+.hl.num {
+  color: #AF0F91;
+}
+.hl.str {
+  color: #317ECC;
+}
+.hl.com {
+  color: #AD95AF;
+  font-style: italic;
+}
+.hl.opt {
+  color: #000000;
+}
+.hl.std {
+  color: #585858;
+}
+.hl.kwa {
+  color: #295F94;
+  font-weight: bold;
+}
+.hl.kwb {
+  color: #B05A65;
+}
+.hl.kwc {
+  color: #55aa55;
+}
+.hl.kwd {
+  color: #BC5A65;
+  font-weight: bold;
+}
+</style>
+<title>Lab 1</title>
+</head>
+
+<body>
+
+<p>Set-Up</p>
+
+<div class="chunk" id="unnamed-chunk-1"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># clear console</span>
+<span class="hl kwd">cat</span>(<span class="hl str">&quot;\014&quot;</span>)
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># set working directory</span>
+<span class="hl kwd">setwd</span>(<span class="hl str">&quot;C://Users//Dominique//Desktop//Data_Analysis_and_Statistical_Inference&quot;</span>)
+<span class="hl kwd">library</span>(<span class="hl str">&quot;knitr&quot;</span>)
+</pre></div>
+</div></div>
+
+
+<p>Exercises</p>
+
+<div class="chunk" id="unnamed-chunk-2"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># load cdc data</span>
+<span class="hl kwd">load</span>(<span class="hl kwd">url</span>(<span class="hl str">&quot;http://s3.amazonaws.com/assets.datacamp.com/course/dasi/cdc.Rdata&quot;</span>))
+<span class="hl com"># print names of variables</span>
+<span class="hl kwd">names</span>(cdc)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] "genhlth"  "exerany"  "hlthplan" "smoke100" "height"   "weight"  
+## [7] "wtdesire" "age"      "gender"
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># print head and tails of data frame</span>
+<span class="hl kwd">head</span>(cdc)
+</pre></div>
+<div class="output"><pre class="knitr r">##     genhlth exerany hlthplan smoke100 height weight wtdesire age gender
+## 1      good       0        1        0     70    175      175  77      m
+## 2      good       0        1        1     64    125      115  33      f
+## 3      good       1        1        1     60    105      105  49      f
+## 4      good       1        1        0     66    132      124  42      f
+## 5 very good       0        1        0     61    150      130  55      f
+## 6 very good       1        1        0     64    114      114  55      f
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">tail</span>(cdc)
+</pre></div>
+<div class="output"><pre class="knitr r">##         genhlth exerany hlthplan smoke100 height weight wtdesire age
+## 19995      good       0        1        1     69    224      224  73
+## 19996      good       1        1        0     66    215      140  23
+## 19997 excellent       0        1        0     73    200      185  35
+## 19998      poor       0        1        0     65    216      150  57
+## 19999      good       1        1        0     67    165      165  81
+## 20000      good       1        1        1     69    170      165  83
+##       gender
+## 19995      m
+## 19996      f
+## 19997      m
+## 19998      f
+## 19999      f
+## 20000      m
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># view the head or tail of both the height and the genhlth variables</span>
+<span class="hl kwd">head</span>(cdc$height)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 70 64 60 66 61 64
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">head</span>(cdc$genhlth)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] good      good      good      good      very good very good
+## Levels: excellent very good good fair poor
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># assign sum of two numbers</span>
+sum = 84941 + 19686
+<span class="hl com"># assign multiplication of two numbers</span>
+mult = 73 * 51
+<span class="hl com"># calculate the mean, variance, median, and other statistical measures of</span>
+<span class="hl com"># the weight variable</span>
+<span class="hl kwd">mean</span>(cdc$weight)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 169.7
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">var</span>(cdc$weight)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 1606
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">median</span>(cdc$weight)
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 165
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">summary</span>(cdc$weight)
+</pre></div>
+<div class="output"><pre class="knitr r">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##      68     140     165     170     190     500
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># report the number of times each kind of category occurs <span class="hl kwa">in</span> a variable</span>
+<span class="hl com"># (i.e., frequency table)</span>
+<span class="hl kwd">table</span>(cdc$smoke100)
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+##     0     1 
+## 10559  9441
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># a relative frequency table is the category breakdown divided by the</span>
+<span class="hl com"># number of observations</span>
+<span class="hl kwd">table</span>(cdc$genhlth)/20000
+</pre></div>
+<div class="output"><pre class="knitr r">## 
+## excellent very good      good      fair      poor 
+##   0.23285   0.34860   0.28375   0.10095   0.03385
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># build barplot of smoker data</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-3"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">barplot</span>(<span class="hl kwd">table</span>(cdc$smoke100))
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-3.png" title="plot of chunk unnamed-chunk-3" alt="plot of chunk unnamed-chunk-3" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-4"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># tabulate the number of people who've smoked from the various health</span>
+<span class="hl com"># categories</span>
+<span class="hl kwd">table</span>(cdc$genhlth, cdc$smoke100)
+</pre></div>
+<div class="output"><pre class="knitr r">##            
+##                0    1
+##   excellent 2879 1778
+##   very good 3758 3214
+##   good      2782 2893
+##   fair       911 1108
+##   poor       229  448
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># determine how many smokers there are <span class="hl kwa">in</span> each category and report the</span>
+<span class="hl com"># result</span>
+gender_smokers = <span class="hl kwd">table</span>(cdc$gender, cdc$smoke100)
+gender_smokers
+</pre></div>
+<div class="output"><pre class="knitr r">##    
+##        0    1
+##   m 4547 5022
+##   f 6012 4419
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># plot this as a mosaic plot</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-5"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">mosaicplot</span>(gender_smokers)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-5.png" title="plot of chunk unnamed-chunk-5" alt="plot of chunk unnamed-chunk-5" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-6"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># create subsets of specific observations of specific variables of the</span>
+<span class="hl com"># data based on position</span>
+height_1337 = cdc[1337, 5]
+weight_111 = cdc[111, 6]
+<span class="hl com"># print the results</span>
+height_1337
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 70
+</pre></div>
+<div class="source"><pre class="knitr r">weight_111
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 210
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create subsets of groups of observations and variables [rows,columns]</span>
+first8 = cdc[1:8, 3:5]
+wt_gen_10_20 = cdc[10:20, 6:9]
+<span class="hl com"># print the results</span>
+first8
+</pre></div>
+<div class="output"><pre class="knitr r">##   hlthplan smoke100 height
+## 1        1        0     70
+## 2        1        1     64
+## 3        1        1     60
+## 4        1        0     66
+## 5        1        0     61
+## 6        1        0     64
+## 7        1        0     71
+## 8        1        0     67
+</pre></div>
+<div class="source"><pre class="knitr r">wt_gen_10_20
+</pre></div>
+<div class="output"><pre class="knitr r">##    weight wtdesire age gender
+## 10    180      170  44      m
+## 11    186      175  46      m
+## 12    168      148  62      m
+## 13    185      220  21      m
+## 14    170      170  69      m
+## 15    170      170  23      m
+## 16    185      175  79      m
+## 17    156      150  47      m
+## 18    185      185  76      m
+## 19    200      190  43      m
+## 20    125      120  33      f
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create subsets of a specific observation and a specifc set of variables</span>
+resp205 = cdc[205, ]
+ht_wt = cdc[, 5:6]
+<span class="hl com"># print the results</span>
+resp205
+</pre></div>
+<div class="output"><pre class="knitr r">##     genhlth exerany hlthplan smoke100 height weight wtdesire age gender
+## 205    fair       0        0        1     61    200      125  49      f
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">head</span>(ht_wt)
+</pre></div>
+<div class="output"><pre class="knitr r">##   height weight
+## 1     70    175
+## 2     64    125
+## 3     60    105
+## 4     66    132
+## 5     61    150
+## 6     64    114
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create subsets of observations based upon variable names</span>
+resp1000_smk = cdc$smoke100[1000]
+first30_ht = cdc$height[1:30]
+<span class="hl com"># print the results</span>
+resp1000_smk
+</pre></div>
+<div class="output"><pre class="knitr r">## [1] 1
+</pre></div>
+<div class="source"><pre class="knitr r">first30_ht
+</pre></div>
+<div class="output"><pre class="knitr r">##  [1] 70 64 60 66 61 64 71 67 65 70 69 69 66 70 69 73 67 71 75 67 69 65 73
+## [24] 67 64 68 67 69 61 74
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create subsets based on conditions</span>
+very_good = <span class="hl kwd">subset</span>(cdc, cdc$genhlth == <span class="hl str">&quot;very good&quot;</span>)
+age_gt50 = <span class="hl kwd">subset</span>(cdc, cdc$age &gt; 50)
+<span class="hl com"># print the results</span>
+<span class="hl kwd">head</span>(very_good)
+</pre></div>
+<div class="output"><pre class="knitr r">##      genhlth exerany hlthplan smoke100 height weight wtdesire age gender
+## 5  very good       0        1        0     61    150      130  55      f
+## 6  very good       1        1        0     64    114      114  55      f
+## 7  very good       1        1        0     71    194      185  31      m
+## 8  very good       0        1        0     67    170      160  45      m
+## 20 very good       1        1        0     67    125      120  33      f
+## 21 very good       1        1        0     69    200      150  48      f
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl kwd">head</span>(age_gt50)
+</pre></div>
+<div class="output"><pre class="knitr r">##      genhlth exerany hlthplan smoke100 height weight wtdesire age gender
+## 1       good       0        1        0     70    175      175  77      m
+## 5  very good       0        1        0     61    150      130  55      f
+## 6  very good       1        1        0     64    114      114  55      f
+## 12      fair       1        1        1     69    168      148  62      m
+## 14 excellent       1        1        1     70    170      170  69      m
+## 16      good       1        1        1     73    185      175  79      m
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create subsets based on mulitple conditions</span>
+under23_and_smoke = <span class="hl kwd">subset</span>(cdc, cdc$age &lt; 23 &amp; cdc$smoke100 == 1)
+<span class="hl com"># print the first six results</span>
+<span class="hl kwd">head</span>(under23_and_smoke)
+</pre></div>
+<div class="output"><pre class="knitr r">##       genhlth exerany hlthplan smoke100 height weight wtdesire age gender
+## 13  excellent       1        0        1     66    185      220  21      m
+## 37  very good       1        0        1     70    160      140  18      f
+## 96  excellent       1        1        1     74    175      200  22      m
+## 180      good       1        1        1     64    190      140  20      f
+## 182 very good       1        1        1     62     92       92  21      f
+## 240 very good       1        0        1     64    125      115  22      f
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># create a boxplot of a specific variable's data</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-7"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">boxplot</span>(cdc$height)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-7.png" title="plot of chunk unnamed-chunk-7" alt="plot of chunk unnamed-chunk-7" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-8"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># print a statistical summary of this variable's data</span>
+<span class="hl kwd">summary</span>(cdc$height)
+</pre></div>
+<div class="output"><pre class="knitr r">##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##    48.0    64.0    67.0    67.2    70.0    93.0
+</pre></div>
+<div class="source"><pre class="knitr r"><span class="hl com"># draw a boxplot of multiple variables</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-9"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">boxplot</span>(cdc$weight ~ cdc$smoke100)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-9.png" title="plot of chunk unnamed-chunk-9" alt="plot of chunk unnamed-chunk-9" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-10"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># calculate bmi</span>
+bmi = (cdc$weight/(cdc$height^2)) * 703
+<span class="hl com"># draw a boxplot of bmi vs. general health</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-11"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">boxplot</span>(bmi ~ cdc$genhlth)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-11.png" title="plot of chunk unnamed-chunk-11" alt="plot of chunk unnamed-chunk-11" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-12"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># draw various histograms of bmi data, with differing number of bins</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-13"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">hist</span>(bmi)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-13.png" title="plot of chunk unnamed-chunk-13" alt="plot of chunk unnamed-chunk-13" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-14"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">hist</span>(bmi, breaks = 50)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-14.png" title="plot of chunk unnamed-chunk-14" alt="plot of chunk unnamed-chunk-14" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-15"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">hist</span>(bmi, breaks = 100)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-15.png" title="plot of chunk unnamed-chunk-15" alt="plot of chunk unnamed-chunk-15" class="plot" /></div></div>
+
+
+<div class="chunk" id="unnamed-chunk-16"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl com"># draw scatterplot of weight and desired weight</span>
+</pre></div>
+</div></div>
+
+
+<div class="chunk" id="unnamed-chunk-17"><div class="rcode"><div class="source"><pre class="knitr r"><span class="hl kwd">plot</span>(cdc$weight, cdc$wtdesire)
+</pre></div>
+</div><div class="rimage default"><img src="figure/unnamed-chunk-17.png" title="plot of chunk unnamed-chunk-17" alt="plot of chunk unnamed-chunk-17" class="plot" /></div></div>
+
+
+</body>
+</html>
